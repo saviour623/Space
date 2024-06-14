@@ -11,6 +11,7 @@ var server = http.createServer((req, res) => {
 
     res.end();
 });
-server.listen(port, host, (port, host) => {
-    console.log("[server http://"+host+":"port+" initiated] listening for request");
+server.listen(port, host);
+server.on('listening', function() {
+    console.log('[server http://%s:%d initiated] listening for request', server.address().address, server.address().port);
 });

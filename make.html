@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Login </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="make.css" />
+    <script src="js/jquery/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var usrElement = $(".userLoginUsername");
+            var usrDefaultStyle = {
+                "background-color": usrElement.css("background-color"),
+                "outline": usrElement.css("outline"),
+                "box-shadow": usrElement.css("box-shadow")
+            };
+            usrElement.change((ev) => {
+                let target = $(ev.target);
+                let value = target.val();
+                if ((value.length !== 0) && /[\S]+/.test(value)) {
+                    target.css(usrDefaultStyle);
+                    target.attr("data-state", "1");
+                } else {
+                    target.attr("data-state", "0");
+                }
+            });
+            $(".userLoginPassword").change(function(ev) {
+                let target = $(ev.target);
+                let value = target.val();
+                if ((value.length !== 0) && /[\S]+/.test(value) && usrElement.attr("data-state") == 1) {
+                    $(".userLoginSubmit").prop("disabled", false);
+                } else {
+                    usrElement.css({
+                        "background-color": "transparent", "outline": "1px solid #961616", "box-shadow": "none"
+                    });
+                    usrElement.focus();
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="col">
+        <div class="col left">
+            <div class="loginWrapper">
+                <h1 class="loginText">Welcome Back</h1>
+                <form class="userLoginForm" action="#">
+                    <div data-input-style></div>
+                    <input type="text" name="username" class="userLogin userLoginUsername" placeholder="Username: JohnDoe123" data-state="0"
+                    autofocus />
+                    <input type="password" name="password" class="userLogin userLoginPassword"
+                    placeholder="Password: ••••••••" data-state="0" />
+                    <button type="submit" onclick="return submitForm()" class="userLogin userLoginSubmit" disabled="on">Login</button>
+                </form>
+                <hr data-line-divisor data-text="  Or  " />
+                <div class="alternateLogin google" data-text-google="Google"></div>
+                <div class="alternateLogin facebook" data-text-facebook="Facebook"></div>
+                <p data-privacy-text>
+                    By logging in with my Facebook or Google account, I agree to the <a href="">Terms of
+                        Use</a>. My personal data will be processed in accordance with the descriptions of the <a href="">Privacy
+                        Statement.</a>
+                </p>
+                <div class="signIn">
+                    Sign In
+                </div>
+                <p data-text-last>
+                    Forgot Password? <a>Reset</a>
+                </p>
+            </div>
+        </div>
+        <div class="col right"></div>
+    </div>
+    <script>
+    alert("in");
+       /* function submitForm () {
+            let usrId = $(".userLoginUsername").val();
+            let usrToken = $(".userLoginPassword").val();
+            assertValue = (val) => {
+                //Todo: test object type here
+                return !!val.length && /[\S]+/.test(val);
+            }
+            tmp = new Array(assertValue(usrId), assertValue (usrToken)); 
+            errMsgNum = !tmp[0] && !tmp[1] ? "1" : !tmp[0] ? "2" : !tmp[1] ? "3" : "0";
+            ((msgNum, target, style) => {
+                var errMsgTag = {
+                    defaultErrMsg: {
+                        "1": "error: you must enter a valid username and password",
+                        "2": "error: This page requires a registered username",
+                        "3": "error: this page requires a valid password",
+                        "4": "error: username field contains unsupported characters"
+                    }
+                    defaultCss: {
+                        "background-color": "transparent",
+                        "outline": "1px solid #961616",
+                        "box-shadow": "none"
+                    },
+                    insertErrChildElement: function(at,
+                        tag,
+                        msg) {
+                        let newElement = document.createElement("tag");
+                        var childId = "errChild";
+                        newElement.innerHTML.setAttribute("id",
+                            childId);
+                        newElement.innerHTML = msg;
+                        at = document.getElementsByTagName(at);
+                        at.normalize();
+                        at.firstElementChild.insertBefore(newElement);
+                        return childId;
+                    }
+                    errFormat: function(at, el, msgNum, style) {
+                        if (!(at && el)){
+                        let errChildId = this.insertErrChildElement(at,
+                            el,
+                            this.defaultErrMsg(msgNum));
+                        errChild.style(!style ? this.css : style);
+                        }
+                    }
+                }
+                if (!msgNum || !target)
+                    return -1;
+                    errMsgTag.errFormat(msgNum, target, "p", style);
+                }
+            })(errMsg, document.forms["userLoginForm"], 0); */
+
+        }
+    </script>
+</body>
+
+</html>

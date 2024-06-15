@@ -7,10 +7,13 @@ var index_html = fs.readFileSync('./login.html');
 var index_css = fs.readFileSync('./login.css');
 var server = http.createServer((req, res) => {
     console.log("[requesting]: " + req.url);
-    res.writeHead(200, {'content-type':'text/html'});
-    res.write(index_html);
-    res.writeHead(200, {'content-type':'text/css'});
-    res.write(index_css);
+    if (req.url == '/') {
+	res.writeHead(200, {'content-type':'text/html'});
+	res.write(index_html);
+    } else if (req.url == '/login.css') {
+	res.writeHead(200, {'content-type':'text/css'});
+	res.write(index_css);
+    }
     res.end();
 });
 server.listen(port, host);

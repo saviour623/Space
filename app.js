@@ -5,6 +5,7 @@ const host = '0.0.0.0'
 
 var index_html = fs.readFileSync('./login.html');
 var index_css = fs.readFileSync('./login.css');
+var index_jq = fs.readFileSync('./js/jquery/jquery-3.7.1.min.js');
 var server = http.createServer((req, res) => {
     console.log("[requesting]: " + req.url);
     if (req.url == '/') {
@@ -13,6 +14,9 @@ var server = http.createServer((req, res) => {
     } else if (req.url == '/login.css') {
 	res.writeHead(200, {'content-type':'text/css'});
 	res.write(index_css);
+    } else if (req.url == '/js/jquery/jquery-3.7.1.min.js'){
+	res.writeHead(200, {'content-type':'script/javaScript'});
+        res.write(index_jq);
     }
     res.end();
 });

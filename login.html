@@ -4,38 +4,23 @@
 <head>
     <title> Login </title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" type="text/css" href="login.css" />
+    <link rel="stylesheet" type="text/css" href="make.css" />
     <script src="js/jquery/jquery-3.7.1.min.js"></script>
     <script>
-        $(document).ready(function() {
-            var usrElement = $(".userLoginUsername");
-            var usrDefaultStyle = {
-                "background-color": usrElement.css("background-color"),
-                "outline": usrElement.css("outline"),
-                "box-shadow": usrElement.css("box-shadow")
-            };
-            usrElement.change((ev) => {
-                let target = $(ev.target);
-                let value = target.val();
-                if ((value.length !== 0) && /[\S]+/.test(value)) {
-                    target.css(usrDefaultStyle);
-                    target.attr("data-state", "1");
-                } else {
-                    target.attr("data-state", "0");
+        $(document).ready(function () {
+            const userLogin = $(".userLogin");
+            // save default margin
+            const defaultMargin = userLogin.css("margin-top");
+            //initialize event
+            userLogin.change((e) => {
+                let msgBox = $(".userLoginForm").children()[0];
+
+                if (msgBox && msgBox.className === "msgBox") {
+                    // turn off message box
+                    $(msgBox).next()[0].style.marginTop = defaultMargin;
+                    $(msgBox).hide();
                 }
-            });
-            $(".userLoginPassword").change(function(ev) {
-                let target = $(ev.target);
-                let value = target.val();
-                if ((value.length !== 0) && /[\S]+/.test(value) && usrElement.attr("data-state") == 1) {
-                    $(".userLoginSubmit").prop("disabled", false);
-                } else {
-                    usrElement.css({
-                        "background-color": "transparent", "outline": "1px solid #961616", "box-shadow": "none"
-                    });
-                    usrElement.focus();
-                }
-            });
+            })
         });
     </script>
 </head>
@@ -46,19 +31,22 @@
             <div class="loginWrapper">
                 <h1 class="loginText">Welcome Back</h1>
                 <form class="userLoginForm" action="#">
-                    <div data-input-style></div>
-                    <input type="text" name="username" class="userLogin userLoginUsername" placeholder="Username: JohnDoe123" data-state="0"
-                    autofocus />
-                    <input type="password" name="password" class="userLogin userLoginPassword"
-                    placeholder="Password: ••••••••" data-state="0" />
-                    <button type="submit" onclick="return submitForm()" class="userLogin userLoginSubmit" disabled="on">Login</button>
+                    <!-- <p class="msgBox"> -->
+                    <!-- form message -->
+                    <!-- </p> -->
+                    <input type="text" name="username" class="inputFieldsJs userLogin userLoginUsername"
+                        placeholder="Username: JohnDoe123" data-state="0" minlength="1 autofocus autocomplete="on" />
+                    <input type="password" name="password" class="inputFieldsJs userLogin userLoginPassword"
+                        placeholder="Password: ••••••••" data-state="0" minlength="8" maxlength="16" />
+                    <button type="submit" onclick="return submitForm()" class="userLogin userLoginSubmit">Login</button>
                 </form>
                 <hr data-line-divisor data-text="  Or  " />
                 <div class="alternateLogin google" data-text-google="Google"></div>
                 <div class="alternateLogin facebook" data-text-facebook="Facebook"></div>
                 <p data-privacy-text>
                     By logging in with my Facebook or Google account, I agree to the <a href="">Terms of
-                        Use</a>. My personal data will be processed in accordance with the descriptions of the <a href="">Privacy
+                        Use</a>. My personal data will be processed in accordance with the descriptions of the <a
+                        href="">Privacy
                         Statement.</a>
                 </p>
                 <div class="signIn">
@@ -72,57 +60,76 @@
         <div class="col right"></div>
     </div>
     <script>
-    alert("in");
-       /* function submitForm () {
-            let usrId = $(".userLoginUsername").val();
-            let usrToken = $(".userLoginPassword").val();
-            assertValue = (val) => {
-                //Todo: test object type here
-                return !!val.length && /[\S]+/.test(val);
+        const errMsg = {
+            errAllFields: "Enter a valid username and password",
+            errUserInvalid: "Enter a valid username",
+            errPasswdInvalid: "Enter a valid password",
+            errUserUnsupported: "Unsupported character(s) found in username. Format: alphabet + [ alphanumeric or [#_.$] ]...",
+            errPasswdUnsupported: "Unsupported character(s) found in password. Password mustn't contain any whitespace character"
+        }
+        const cssStyle = {
+            "background-color": "transparent",
+            "outline": "1px solid #961616",
+            "box-shadow": "none",
+            "white-space": "pre"
+        }
+        function validate(_usrnm, _tok) {
+            const usrnm = $(_usrnm);
+            const tok = $(_tok);
+            const name = usrnm.val()
+            const passwd = tok.val()
+            const regAssert = (v, f) => {
+                //f - flag to switch between the application of the regex tests
+                return !(f ? /^(?=[a-z])[a-z0-9#$_.]+$/i.test(v) : /^(?!\s)+.+$/.test(v));
             }
-            tmp = new Array(assertValue(usrId), assertValue (usrToken)); 
-            errMsgNum = !tmp[0] && !tmp[1] ? "1" : !tmp[0] ? "2" : !tmp[1] ? "3" : "0";
-            ((msgNum, target, style) => {
-                var errMsgTag = {
-                    defaultErrMsg: {
-                        "1": "error: you must enter a valid username and password",
-                        "2": "error: This page requires a registered username",
-                        "3": "error: this page requires a valid password",
-                        "4": "error: username field contains unsupported characters"
-                    }
-                    defaultCss: {
-                        "background-color": "transparent",
-                        "outline": "1px solid #961616",
-                        "box-shadow": "none"
-                    },
-                    insertErrChildElement: function(at,
-                        tag,
-                        msg) {
-                        let newElement = document.createElement("tag");
-                        var childId = "errChild";
-                        newElement.innerHTML.setAttribute("id",
-                            childId);
-                        newElement.innerHTML = msg;
-                        at = document.getElementsByTagName(at);
-                        at.normalize();
-                        at.firstElementChild.insertBefore(newElement);
-                        return childId;
-                    }
-                    errFormat: function(at, el, msgNum, style) {
-                        if (!(at && el)){
-                        let errChildId = this.insertErrChildElement(at,
-                            el,
-                            this.defaultErrMsg(msgNum));
-                        errChild.style(!style ? this.css : style);
-                        }
-                    }
-                }
-                if (!msgNum || !target)
-                    return -1;
-                    errMsgTag.errFormat(msgNum, target, "p", style);
-                }
-            })(errMsg, document.forms["userLoginForm"], 0); */
+            const [errTarget, errTxt] = !name.length && !passwd.length ? /* disable both target */[null, null]
+                : !name.length ? [usrnm, errMsg.errUserInvalid]
+                    : regAssert(name, 1) ? [tok, errMsg.errUserUnsupported]
+                        : !passwd.length ? [tok, errMsg.errPasswdInvalid]
+                            : regAssert(passwd, 0) ? [tok, errMsg.errPasswdUnsupported]
+                                : [null, null];
 
+            if (errTarget) {
+                console.log("error '%s' received from input field", errTxt);
+                // error found (returns false which prevents any event action) 
+                return !deliverError(errTarget, errTarget.parent(), errTxt);
+            }
+            // validated
+            return true;
+        }
+        /* @deliverError: write message (error) to message box */
+        function deliverError(target, at, txt, css = true, focus = true) {
+//set target to desired error style
+            css && target.css(cssStyle);
+            //autofocus error element
+            focus && target.focus();
+            //append the text to the message box. create and append if element doesn't exist
+            var msgBox = txt ? $($(at).children()[0]) : null;
+            if (!msgBox || !msgBox.hasClass("msgBox")) {
+                var newElement = document.createElement('p');
+                newElement.setAttribute("class", "msgBox");
+                newElement.setAttribute("style", "display: inline; font-size: .75rem; color: rgb(235, 235, 235); text-align: left");
+                newElement.innerHTML = txt;
+                $(at).prepend(newElement);
+                msgBox = $(newElement);
+            }
+            //adjust margin if set
+            nxt = (msgBox.next())[0];
+                margin = window.getComputedStyle(nxt).getPropertyValue("margin-top");
+                if (margin && parseInt(margin)) {
+                    nxt.style.marginTop = 0;
+                    msgBox[0].setAttribute("style", "margin-top:" + margin + "; margin-bottom: 6px");
+                }
+                msgBox.text(txt);
+                msgBox.show();
+            return true;
+        }
+        function submitForm() {
+            var usrname, usrpasswd;
+            usrname = $(".userLoginUsername");
+            usrpasswd = $(".userLoginPassword");
+            //Boolean
+            return validate(usrname, usrpasswd);
         }
     </script>
 </body>

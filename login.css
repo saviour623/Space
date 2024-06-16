@@ -45,6 +45,7 @@ body * {
     }
     .col.left {
         width: 100%;
+        min-width: 212px;
     }
 
     .col.right {
@@ -103,22 +104,19 @@ body * {
     font-size: 28px;
     color: #DDD;
     font-weight: normal;
+    margin-bottom: -6px;
 }
 
 .userLoginForm {
     width: 100%;
     border: none;
 }
-
-[data-input-style] {
-    width: 14.5%;
-    border: 1px solid;
-    background-color: white;
-    padding: calc(((7.5px + 1.35px + 14.35px) * 2) + 5.96px) 0;
-    position: absolute;
-    top: 15px;
-    z-index: 1;
-    visibility: hidden;
+.userLoginForm > .msgBox {
+    font-size: .75rem;
+    color: rgb(235, 235, 235);
+    text-align: left;
+    /* display will be toggled using script */
+    display: none;
 }
 
 .userLogin {
@@ -136,7 +134,7 @@ body * {
     background-color: #36363696;
     backdrop-filter: blur(28px);
     box-shadow: 1px 1px 12px 2px #0808084d;
-    text-wrap: pre-wrap;
+    white-space: pre-wrap;
     border: none;
     font-size: 14px;
     text-indent: 6%;
@@ -197,7 +195,7 @@ body * {
     position: relative;
     overflow: visible;
     text-align: center;
-    font-size: .9rem;
+    font-size: .85rem;
 }
 
 .alternateLogin.google {

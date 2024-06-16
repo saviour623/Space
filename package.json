@@ -5,11 +5,11 @@
     "name": "space",
     "version": "1.0.0",
     "description": "e-space app",
-    "main": "app.js",
+    "main": "js/app.js",
     "devDependencies": {},
     "scripts": {
-	"start": "node app.js",
-	"test": "node app.js"
+	"start": "node js/app.js",
+	"test": "node js/app.js"
     },
     "repository": {
 	"type": "git",

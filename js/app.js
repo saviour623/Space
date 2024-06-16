@@ -3,8 +3,8 @@ var fs = require('fs');
 const port = process.env.PORT;
 const host = '0.0.0.0'
 
-var index_html = fs.readFileSync('./login.html');
-var index_css = fs.readFileSync('./login.css');
+var index_html = fs.readFileSync('./html/login.html');
+var index_css = fs.readFileSync('./css/login.css');
 var index_jq = fs.readFileSync('./js/jquery/jquery-3.7.1.min.js');
 var server = http.createServer((req, res) => {
     console.log("[requesting]: " + req.url);
